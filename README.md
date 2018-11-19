@@ -12,5 +12,5 @@ Code for reproducing results in the manuscript
     - agreement matrix : enter parameters, exit matrix
     - shortest path: enter network, exit distribution on nodes
     - agreement matrix (for subset of the samples): enter parameteres and subset, exit matrix
-4. Description on hoe to run all of it
+4. Description on how to run all of it
 5. Tests (in the future)
