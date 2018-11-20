@@ -1,6 +1,6 @@
 # paper_NetNeuro_code
 Code for reproducing results in the manuscript: 
-"Analysis of brain transcriptomics through topological-cluster networks" by Patania A. et al. (2018)
+"Topological gene-expression networks recapitulate brain anatomy and function" by Patania A. et al. (2018)
 
 ## Content:
 1. dataset normalized
