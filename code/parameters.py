@@ -1,10 +1,13 @@
-import mapper,cmappertools
-import networkx as nx
-from itertools import combinations
-from networkx.drawing.nx_agraph import graphviz_layout
-from __future__ import division
-from itertools import product
+
 import MapperTools as mt
+import networkx as nx
+from networkx.drawing.nx_agraph import graphviz_layout
+from itertools import combinations, product
+from __future__ import division
+from scipy.spatial import distance
+from scipy.stats import entropy
+
+#-------------------------Computing average bin size for percentile bins with density from 1% to 50% of the total dataset size
 bin_TEST = {}
 for nbins in  range(1,50):
     bins_0 = mt.percentile_bins(fil_0, q = nbins/100, overlap = 0.)
@@ -20,7 +23,7 @@ for nbins in  range(1,50):
         if current_bin.tolist():
             bin_size += current_bin.size
     bin_TEST[nbins] = bin_size/(len(bins_dict['pca_comp_0'])*len(bins_dict['pca_comp_1']))
-
+#-------------------List of bin densities that on average have enough points to run the algorithm
 q = np.array(bin_TEST.keys())
 PASS_nbins = []
 bin_size= np.array(bin_TEST.values())
@@ -28,37 +31,8 @@ for s in np.unique(bin_size[bin_size>=5]): #window size at least 5 points
     PASS_nbins.append(q[bin_size==s].max())
     PASS_nbins.append(q[bin_size==s].min())
 PASS_nbins = np.array(sorted(list(set(PASS_nbins))))
-
-from itertools import product
-from scipy.spatial import distance
-from scipy.stats import entropy
-#
-from MapperTools import cluster_DBSCAN
-def th_avdeg(L,node_info):
-    tot_th_deg = 0
-    if sqrt(len(L))% 1 !=0:
-        raise ValueError('number of level set indices is not correct')
-    from itertools import product
-    def neigh_numbers(x):
-        nn = 0
-        for i,j in product([x[0]-1,x[0],x[0]+1],[x[1]-1,x[1],x[1]+1]):
-            if (i,j)==x:
-                continue
-            if (i<0) or (j<0) or (i>=sqrt(len(L))) or (j>=sqrt(len(L))):
-                continue
-            nn += len(L[(i,j)])
-        return nn
-    for x,ns in L.iteritems():
-        if (x[0] == 0) or (x[0] == sqrt(len(L))-1) or (x[1] == 0) or (x[1] == sqrt(len(L))-1):
-            if (x[0] == x[1]) or (x == (0,sqrt(len(L))-1)) or (x == (sqrt(len(L))-1,0)):
-                tot_th_deg += neigh_numbers(x)*len(ns)
-            else:
-                tot_th_deg += neigh_numbers(x)*len(ns)
-        else:
-            tot_th_deg += neigh_numbers(x)*len(ns)
-    return tot_th_deg/len(node_info)
-#
-mapper_medsize = {}#
+#-------------------Initialize dictionaries for the collection of statistics
+mapper_medsize = {}
 mapper_avsize = {}
 mapper_avdeg = {}
 mapper_cc = {}
@@ -71,8 +45,7 @@ mapper_std = {}
 mapper_entropy = {}
 mapper_entropy_1 = {}
 mapper_entropy_Ed = {}
-from itertools import product
-#
+#--------------------Running the mapper for all parameters and recording the statistics
 filter_dict={'pca_comp_0':fil_0, 'pca_comp_1':fil_1}
 store_gen=pd.DataFrame(distance.squareform(dis_list),index= index_str_order, columns= index_str_order)
 cluster="DBSCAN"
@@ -86,7 +59,6 @@ for nbins,overlap in  product(PASS_nbins,range(5,90,5)):
     gg=nx.Graph()
     gg.add_nodes_from(node_info.keys())
     gg.add_edges_from(adja.keys())
-    #adja,node_info,level = dist_TEST[(nbins,overlap)]['euclidean']
     #
     mapper_avsize[(nbins,overlap)] = len(gg.nodes())/nx.number_connected_components(gg)
     mapper_medsize[(nbins,overlap)] = np.median(map(len,nx.connected_components(gg)))
@@ -105,9 +77,10 @@ for nbins,overlap in  product(PASS_nbins,range(5,90,5)):
     mapper_entropy_1[(nbins,overlap)] = entropy(S_cc[S_cc>1])
     S_cc_Ed = np.array(map(lambda x: nx.number_of_edges(nx.subgraph(gg,x)),nx.connected_components(gg)))
     mapper_entropy_Ed[(nbins,overlap)] = entropy(S_cc_Ed)
-   
+
     del gg, adja, node_info
 
+#--------------------Saving the statistics in a file
 EUCLIDEAN = pd.concat([pd.Series(mapper_avdeg, name='av. deg.'),
                        pd.Series(mapper_cc, name='numb. conn. comp.'),
                        pd.Series(mapper_nonisol_cc, name='numb. conn. comp. NOT points'),
@@ -119,5 +92,8 @@ EUCLIDEAN = pd.concat([pd.Series(mapper_avdeg, name='av. deg.'),
                        pd.Series(mapper_density_diag_f, name='edge density grid+diag floor(sqrt(n))'),
                        pd.Series(mapper_density_grid_c, name='edge density grid ceiling(sqrt(n))'),
                        pd.Series(mapper_density_diag_c, name='edge density grid+diag ceiling(sqrt(n))')],axis=1, ignore_index=False)
-EUCLIDEAN.to_csv('Mapper_parameter_study_dopamine.csv')
+import os
+if not os.path.isdir('../ouput'):
+    od.makedir('../ouput')
+EUCLIDEAN.to_csv('../output/Mapper_parameter_study_'+idx_+'.csv')
 vfunc = np.vectorize(lambda x: 1./x)

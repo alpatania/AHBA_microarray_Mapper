@@ -1,5 +1,29 @@
+from collections import defaultdict
+from itertools import combinations_with_replacement,product
 
-def mapper_2D_density(data_dict,filter_dict,bins_dict,method = "kmeans",verb=False,v=False,n_edges=False, bins=False,**kwargs):
+def mapper_2D_density(data_dict,filter_dict,bins_dict,method= "kmeans", verb= False, n_edges= False, bins= False,**kwargs):
+    """
+    Computing the mapper summary in 2 dimensions.
+
+    Parameters
+    ----------
+
+    data_dict: pandas.DataFrame
+        Input data to perform the clustering on.
+    filter_dict: dict(pandas.Series)
+        pandas.Series() with indices = data_dict.indices, containg the filter values.
+    bins_dict: dict(list(tuples))
+        The output of the choosen mapper_tools.bins function.
+    method: (Optional)
+        Clustering method to be used. Can be {"kmeans","affinity","HDBSCAN"}.
+
+    Returns
+    -------
+    adja : defaultdict(dict)
+        the keys are tuples (i,j) where i,j is and existing edge in the graph. the values are the wights of the edges computed as the numer of elements in common between clusters i and j.
+    node_info : defaultdict(dict)
+        the keys are the nodes of the graph. the values are the set of data points in each node.
+    """
     def creat_adja_notefficient(node_info, level_idx, **kwargs):
         adja = dict()
         from itertools import product
@@ -83,18 +107,18 @@ def mapper_2D_density(data_dict,filter_dict,bins_dict,method = "kmeans",verb=Fal
             result = defaultdict(dict) #--where the cluster is going to be saved
             level = (level_i,level_j) #---current bin id
             idx = idx_0_i & idx_1_j #-----samples in the bin
-            
-            result = inside_mapper_pb(idx, data_dict, level_idx, node_info, method, level, (bins_0[level_i][0],bins_1[level_j][0]),verb=v,**kwargs)
+
+            result = inside_mapper_pb(idx, data_dict, level_idx, node_info, method, level, (bins_0[level_i][0],bins_1[level_j][0]),verb=verb,**kwargs)
             node_info,level_idx[level] = result
             del result, idx, level
     #---------------------------------------------END FOR
     #---------------------------adding samples not in any cluster to node_info
     n_nodes = len(node_info)
     for j_,n in enumerate(list(set(undefined_samples).difference(set(present_samples)))):
-        j_ += 1 
+        j_ += 1
         curr_color = j_ + n_nodes
         if curr_color in node_info:
-            raise ValueError('I am dumb')
+            raise ValueError('Please raise this issue in the git repo. It should not happen.')
         node_info[curr_color] = set([n])
     #---------------------------
     print('done.')
@@ -126,7 +150,7 @@ def inside_mapper_pb(idx, data_dict, level_idx, node_info, method, level, b, ver
         labels, n_clusters_, L =cluster_kmeans(now,range(1,min([len(idx),8])),**kwargs)
     elif method== "affinity":
         if kwargs.get("affinity")=='precomputed':
-            now=now[idx] 
+            now=now[idx]
         X=now.as_matrix()
         labels, n_clusters_=cluster_affinity(X,**kwargs)
     elif method == "HDBSCAN":
@@ -178,10 +202,6 @@ def inside_mapper_pb(idx, data_dict, level_idx, node_info, method, level, b, ver
     if verb: print 'nodes in the graph before:',num_graph_nodes,'and now:', len(node_info)
     return node_info,level_idx[level]
 
-from collections import defaultdict
-from MapperTools import cluster_kmeans,cluster_affinity,cluster_DBSCAN
-from itertools import combinations_with_replacement,product
-
 def create_node_matrix(node_info):
     data={}
     for n,d in node_info.iteritems():
@@ -192,6 +212,7 @@ def create_node_matrix(node_info):
                 data.setdefault(b,dict()).setdefault(a,0)
                 data[b][a] +=1
     return data
+
 def cluster_HDBSCAN(X, **kwargs):
     '''
     Computes the hdbscan clustering method for data matrix X using the hdbscan module.
@@ -215,6 +236,7 @@ def cluster_HDBSCAN(X, **kwargs):
     n_clusters_ = len(set(labels_))
     #labels_ = map(lambda x: translate[x], labels)
     return np.array(labels_), n_clusters_
+
 def mapper_single_density(data_dict,filter_fcn,bins,points="row",method = "kmeans",verb=False,**kwargs):
     '''
     Computes the mapper graph for data in data_dict, using filters in filter_dict, and bins in bins_dict.
@@ -230,7 +252,7 @@ def mapper_single_density(data_dict,filter_fcn,bins,points="row",method = "kmean
     points(OPTIONAL): str
         Which axis has to be treated as patients, default="row".
         If "column" is given then the algorithm will be computed for the transposed DataFrame.
-    method : str 
+    method : str
         Clustering method to be used. Can be {"kmeans","affinity","HDBSCAN"}.
         Refer to sklearn documentation for more information on the differences between the methods.
 
@@ -239,8 +261,8 @@ def mapper_single_density(data_dict,filter_fcn,bins,points="row",method = "kmean
     adja : defaultdict(dict)
         the keys are tuples (i,j) where i,j is and existing edge in the graph. the values are the wights of the edges computed as the numer of elements in common between clusters i and j.
     node_info : defaultdict(dict)
-        the keys are the nodes of the graph. the values are 
-    
+        the keys are the nodes of the graph. the values are
+
     '''
     #---------------------------
     present_samples = []
@@ -274,7 +296,7 @@ def mapper_single_density(data_dict,filter_fcn,bins,points="row",method = "kmean
             labels, n_clusters_, rand__=cluster_kmeans(now,range(1,5),**kwargs)
         elif method == "affinity":
             try:
-                now=now[idx] 
+                now=now[idx]
             except:
                 print 'sanity check: i could not make matrix square'
             X=now.as_matrix()
@@ -306,7 +328,7 @@ def mapper_single_density(data_dict,filter_fcn,bins,points="row",method = "kmean
         #        continue
 
         from itertools import cycle
-        
+
         if verb: print ("\tEstimated number of clusters: %d' "% n_clusters_)
 
         node_colors = labels#color_graph(G)
