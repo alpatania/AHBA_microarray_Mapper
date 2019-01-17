@@ -3,10 +3,9 @@ Code for reproducing results in the manuscript:
 "Topological gene-expression networks recapitulate brain anatomy and function" by Patania A. et al. (2018)
 
 ## Content:
-1. dataset normalized
-2. the two list of genes
-    - dopamine
-    - richiardi_list
+1. data:
+    - dataset normalized
+    - the two list of genes used in the study
 3. code:
     - mapper: All the functions
     - choice of parameters: script - enter dataset, exit parameters
