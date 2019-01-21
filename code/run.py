@@ -60,3 +60,4 @@ if __name__ == '__main__':
         store_gen=pd.DataFrame(distance.squareform(dis_list),index= index_str_order, columns= index_str_order)
         adja,node_info = mapper_2D_density(store_gen,filter_dict,bins_dict,method="DBSCAN", metric = 'precomputed')
         pk.dump(node_info,open('../ouput'+idx_+'{}_{}_node_info.pk'.format(nbins,overlap),'w'))
+        pk.dump(adja,open('../ouput'+idx_+'{}_{}_adja.pk'.format(nbins,overlap),'w'))
