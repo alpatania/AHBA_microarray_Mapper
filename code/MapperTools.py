@@ -1,6 +1,18 @@
 from collections import defaultdict
 from itertools import combinations_with_replacement,product
+from numpy import triu_indices_from
+import numpy
 
+from sklearn import metrics
+from sklearn import cluster
+from sklearn.cluster import DBSCAN
+from sklearn.cluster import AffinityPropagation
+from sklearn.cluster import SpectralClustering
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.datasets.samples_generator import make_blobs
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import scale
+from sklearn.metrics import pairwise_distances
 def mapper_2D_density(data_dict,filter_dict,bins_dict,method= "kmeans", verb= False, n_edges= False, bins= False,**kwargs):
     """
     Computing the mapper summary in 2 dimensions.
@@ -372,3 +384,91 @@ def mapper_single_density(data_dict,filter_fcn,bins,points="row",method = "kmean
         node_info[curr_color] = set([n])
     print('done')
     return adja,node_info
+
+import numpy as np
+import pandas as pd
+def percentile_bins(filter_fcn,q=.05,overlap=.40, q_extremes=False):
+    ''' Returns list of tuples containg the extremes of the intervals that define the bins
+
+    Parameters
+    ----------
+    filter_fcn : pandas.Series
+        A pandas.Series whose elements are the values of the filter.
+    q : float , optional
+        Percentage of the total number of points contained in every bin. default (`q` = .05).
+    overlap : Optional[float]
+        Percentage of points in each bin that overlaps with the next one. default (`overlap` = .4).
+    q_extremes : Optional[bool]
+        If True returns list of tuples containg the extremes of the intervals that define the bins in terms of percentiles. default (`q_extremes` = False)
+
+    Returns
+    -------
+    List of tuples containg the extremes of the intervals that define the bins.
+    '''
+    ov_perc=q*overlap
+
+    bins=[]
+    bins_q=[(0,q)]
+    last=(0,q)
+    if q == 0:
+        raise ValueError('q is 0. Please use a positive value')
+    while last[-1]<1:
+        #print(last[-1])
+        if bins == []:
+            bins.append((filter_fcn.min(),filter_fcn.quantile(q)))
+            #idx=list(filter_fcn[(filter_fcn < bins[-1]) & (filter_fcn>=bin[-2])].dropna().index)
+        else:
+            if last[1]+q-ov_perc>1:
+                bins_q.append((last[1]-ov_perc, 1.))
+            else:
+                bins_q.append((last[1]-ov_perc, last[1]+q-ov_perc))
+            bins.append((filter_fcn.quantile(bins_q[-1][0]),filter_fcn.quantile(bins_q[-1][1])))
+            #idx=list(filter_fcn[(filter_fcn < bins[-1][1]) & (filter_fcn>=bin[-1][0])].dropna().index)
+        #print(bins_q)
+        last=bins_q[-1]
+    if q_extremes:
+        return bins_q, bins
+    else:
+        return bins
+
+def fix_step_bins(fil_D, number_bins, overlap=0.4):
+    ''' Returns list of tuples containg the extremes of the intervals that define the bins
+
+    Parameters
+    ----------
+    fil_D : pandas.Series
+        A pandas.Series whose elements are the values of the filter
+
+    number_bins : int
+        1/number_bins is the fixed step for the bins range.
+
+    overlap : Optional[float]
+        Percentage of points in each bin that overlaps with the next one. default (`overlap` = .4).
+
+    Returns
+    -------
+    List of tuples containg the extremes of the intervals that define the bins.
+    '''
+    resolution = 1. / number_bins
+    step = (fil_D.max() - fil_D.min()) * resolution
+    print
+    r_step = step * (1. - overlap)
+    bins_D = zip(list(np.arange(fil_D.min(), fil_D.max() + r_step, r_step))[:-1],list(np.arange(fil_D.min()+step, fil_D.max() + r_step, r_step))[1:])
+    return bins_D
+
+def cluster_DBSCAN(X, **kwargs):
+    '''
+    Computes the dbscan clustering method for data matrix X using the hdbscan module.
+
+    Parameter:
+    ----------------
+    X : multidimension np array of data points
+
+    Returns:
+    ----------------
+    labels, n_clusters_
+    '''
+    db = DBSCAN(min_samples=5, **kwargs).fit(X)#DBSCAN(eps=0.3, min_samples=10).fit(X)
+    labels = db.labels_
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+    return labels, n_clusters_

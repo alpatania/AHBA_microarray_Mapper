@@ -49,7 +49,9 @@ if __name__ == '__main__':
     del lines
 
     store_gen=pd.DataFrame(distance.squareform(dis_list),index= index_str_order, columns= index_str_order)
-
+    import os
+    if not os.path.isdir('../ouput'):
+        od.makedir('../ouput')
     for nbins,overlap in params:
         print nbins, overlap
         bins_0 = mt.percentile_bins(fil_0, q = nbins/100, overlap = overlap/100)
@@ -57,4 +59,4 @@ if __name__ == '__main__':
         bins_dict={'comp_0':bins_0, 'comp_1':bins_1}
         store_gen=pd.DataFrame(distance.squareform(dis_list),index= index_str_order, columns= index_str_order)
         adja,node_info = mapper_2D_density(store_gen,filter_dict,bins_dict,method="DBSCAN", metric = 'precomputed')
-        pk.dump(node_info,open(idx_+'{}_{}_node_info.pk'.format(nbins,overlap),'w'))
+        pk.dump(node_info,open('../ouput'+idx_+'{}_{}_node_info.pk'.format(nbins,overlap),'w'))
