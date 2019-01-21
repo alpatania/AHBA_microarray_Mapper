@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
     dis_list = distance.pdist(store_gen, metric = 'correlation')
 
-    with open('./csv_outputs/Parameters_dopamine.txt', "r") as  text_file:
+    with open('./csv_outputs/Parameters_'+idx_+'.txt', "r") as  text_file:
         lines = text_file.read().lstrip('[(').rstrip(')]').split('), (')
     params = [tuple(map(int,s.split(','))) for s in lines]
     del lines
