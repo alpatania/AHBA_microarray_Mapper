@@ -22,7 +22,14 @@ if __name__ == '__main__':
 
     # idx_='dopamine' # tag that is gonna be used to save the output
     print('Starting...')
-    path_to_gene_list='../data/'+idx_+'_list.txt' #substitute with yours
+    #---------------------Getting the data
+    #---------------------
+    #----PERSONALIZATION-NOTE 1: to run this script on your data substitute the next block with
+    #----                        store_gen = pd.DataFrame() with (n,m) with n the number of data points, m the dimension of the dataset point
+    #----                        fil_0, fil_1 = pd Series() of length n, with fil_0.index == fil_1.index == store_gen.index
+    #---------------------
+    if idx_ != 'full':
+        path_to_gene_list='../data/'+idx_+'_list.txt' #substitute with yours
     verbose = False
 
     left_store_gen=pk.load(open('../data/microarray_input_mapper.pk','r'))
