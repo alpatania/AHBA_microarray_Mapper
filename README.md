@@ -37,7 +37,7 @@ Code for reproducing results in the manuscript:
 
 ## How to reproduce the results:
 
-```bash
+```sh
 python parameters.py name_gene_list
 python selection.py name_gene_list
 python run.py name_gene_list
