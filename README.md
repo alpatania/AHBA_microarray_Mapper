@@ -1,6 +1,10 @@
 # paper_NetNeuro_code
 Code for reproducing results in the manuscript: 
-"Topological gene-expression networks recapitulate brain anatomy and function" by Patania A. et al. (2018)
+
+    "Topological gene-expression networks recapitulate brain anatomy and function" by Patania A. et al. (2018)
+> **DISCLAIMER:**
+> Running all the scripts in this repository is going to give the list of all the results found in the paper, but not the figures or the standard exploratory analysis ( i.e. the histograms and KS tests ). 
+> I am willing to change this decision if anyone needs it, write to me or start an issue
 
 ## Content:
 1. data:
@@ -29,6 +33,7 @@ Code for reproducing results in the manuscript:
   - [ ] write a tutorial on how to run all the code
   - [ ] find a way to put the dataset that are too big for git
   - [ ] make a script to compute the agreement matrix
+  - [ ] add the list of sample ids used by Richiardi et al. in thei paper
 
 ## How to reproduce the results:
 
@@ -39,3 +44,5 @@ python run.py name_gene_list
 python agreement matrix.py name_gene_list
 ```
 with `name_gene_list` is one of (`dopamine`, `richiardi`, or `full`)
+
+The file `shortest_path.py` can be run with any output from `run.py` and `selection.py`. In the paper we only looked at the outcomes from the dopamine related mappers, but it can be run on any other one.
