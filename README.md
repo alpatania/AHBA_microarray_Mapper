@@ -1,5 +1,4 @@
-# TDA summary for gene-expression:  
-## Mapper Algorithm in 2D
+# TDA summary for gene-expression: Mapper Algorithm in 2D
 Code for reproducing results in the manuscript: 
 
     "Topological gene-expression networks recapitulate brain anatomy and function" by Patania A. et al. (2018)
