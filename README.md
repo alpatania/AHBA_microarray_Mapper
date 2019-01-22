@@ -1,4 +1,4 @@
-# paper_NetNeuro_code
+# Topological summary for gene-expression
 Code for reproducing results in the manuscript: 
 
     "Topological gene-expression networks recapitulate brain anatomy and function" by Patania A. et al. (2018)
