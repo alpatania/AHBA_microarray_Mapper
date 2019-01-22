@@ -5,7 +5,17 @@ Code for reproducing results in the manuscript:
 > **DISCLAIMER:**
 > Running all the scripts in this repository is going to give the list of all the results found in the paper, but not the figures or the standard exploratory analysis ( i.e. the histograms and KS tests ). 
 > I am willing to change this decision if anyone needs it, write to me or start an issue
-
+  
+## To do list:
+  - [x] put up the datasets
+  - [x] make a parameters selection script
+  - [x] make all code into scripts that can be run from command line
+  - [ ] make a script to compute the agreement matrix
+  - [x] make the shortest path script
+  - [x] write a tutorial on how to run all the code
+  - [ ] find a way to put the dataset that are too big for git
+  - [ ] add the list of sample ids used by Richiardi et al. in their paper
+  
 ## Content:
 1. data:
     - dataset normalized *this is not actually possible on git because of the file size, i'll find another way, in the meantime write me an email*
@@ -24,16 +34,6 @@ Code for reproducing results in the manuscript:
     takes as input the dataset id (`dopamine`, `richiardi`, or `full`) and saves the matrix a pickled pandas DataFrame in the folder `output`.
     - `shortest_path.py`: Computes the shortest path from the nodes containing samples of VGA and substantia nigra to the rest of the brain.  
     takes as input the dataset id (`dopamine`, `richiardi`, or `full`) and saves the information for each node in a pickled dictionary in the folder `output`.
-    
-## To do list:
-  - [x] put up the datasets
-  - [x] make a parameters selection script
-  - [x] make the shortest path script
-  - [x] make all code into scripts that can be run from command line
-  - [ ] write a tutorial on how to run all the code
-  - [ ] find a way to put the dataset that are too big for git
-  - [ ] make a script to compute the agreement matrix
-  - [ ] add the list of sample ids used by Richiardi et al. in thei paper
 
 ## How to reproduce the results:
 
