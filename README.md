@@ -16,10 +16,10 @@ Code for reproducing results in the manuscript:
     takes as input the dataset id (`dopamine`, `richiardi`, or `full`) and saves the parameters in a txt in the folder `output`.
     - `run.py`: Builds the graph for the optimal parameters found by `selection.py`.  
     takes as input the dataset id (`dopamine`, `richiardi`, or `full`) and saves the adjacency matrix and node information in 2 pickled dictionaries in the folder `output`.
-    - `shortest_path.py`: Computes the shortest path from the nodes containing samples of VGA and substantia nigra to the rest of the brain.  
-    takes as input the dataset id (`dopamine`, `richiardi`, or `full`) and saves the information for each node in a pickled dictionary in the folder `output`.
     - `agreement_matrix.py`: Computes the agreement matrix for the different graph built by `run.py`.  
     takes as input the dataset id (`dopamine`, `richiardi`, or `full`) and saves the matrix a pickled pandas DataFrame in the folder `output`.
+    - `shortest_path.py`: Computes the shortest path from the nodes containing samples of VGA and substantia nigra to the rest of the brain.  
+    takes as input the dataset id (`dopamine`, `richiardi`, or `full`) and saves the information for each node in a pickled dictionary in the folder `output`.
     
 ## To do list:
   - [x] put up the datasets
@@ -29,3 +29,13 @@ Code for reproducing results in the manuscript:
   - [ ] write a tutorial on how to run all the code
   - [ ] find a way to put the dataset that are too big for git
   - [ ] make a script to compute the agreement matrix
+
+## How to reproduce the results:
+
+```bash
+python parameters.py name_gene_list
+python selection.py name_gene_list
+python run.py name_gene_list
+python agreement matrix.py name_gene_list
+```
+with `name_gene_list` is one of (`dopamine`, `richiardi`, or `full`)
