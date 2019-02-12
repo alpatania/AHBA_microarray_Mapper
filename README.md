@@ -40,17 +40,17 @@ Understanding how gene expression translates to and affects human behaviour is o
 ## Citing
 If you make use of this work in your research please cite the following [paper](https://www.biorxiv.org/content/10.1101/476382v1):
 
-Patania, Alice, et al. "Topological gene-expression networks recapitulate brain anatomy and function." bioRxiv (2018): 476382.
+Patania, Alice, Pierluigi Selvaggi, Mattia Veronese, Ottavia DiPasquale, Paul Expert, and Giovanni Petri. "Topological gene-expression networks recapitulate brain anatomy and function." bioRxiv (2018): 476382.
 
 ### Bibtex
 
-@article{patania2018topological,
-  title={Topological gene-expression networks recapitulate brain anatomy and function},
-  author={Patania, Alice and Selvaggi, Pierluigi and Veronese, Mattia and DiPasquale, Ottavia and Expert, Paul and Petri, Giovanni},
-  journal={bioRxiv},
-  pages={476382},
-  year={2018},
-  publisher={Cold Spring Harbor Laboratory}
+@article{patania2018topological,  
+  title={Topological gene-expression networks recapitulate brain anatomy and function},  
+  author={Patania, Alice and Selvaggi, Pierluigi and Veronese, Mattia and DiPasquale, Ottavia and Expert, Paul and Petri, Giovanni},  
+  journal={bioRxiv},  
+  pages={476382},  
+  year={2018},  
+  publisher={Cold Spring Harbor Laboratory}  
 }
 
 ## How to reproduce the results:
