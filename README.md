@@ -63,4 +63,9 @@ $ python agreement matrix.py name_gene_list
 ```
 with `name_gene_list` is one of (`dopamine`, `richiardi`, or `full`)
 
-The file `shortest_path.py` can be run with any output from `run.py` and `selection.py`. In the paper we only looked at the outcomes from the dopamine related mappers, but it can be run on any other one.
+The file `shortest_path.py` can be run with any output from `run.py` and `selection.py`. In the paper we only looked at the outcomes from the dopamine related mappers, but it can be run on any other output.
+
+### Dependencies
+An up-to-date Python 3.5 distribution, with the standard packages provided by the anaconda distribution is required.  
+In particular, the code was tested with:  
+pandas (__version__) etc  
