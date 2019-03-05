@@ -17,6 +17,7 @@ Understanding how gene expression translates to and affects human behaviour is o
   - [x] write a tutorial on how to run all the code
   - [ ] find a way to put the dataset that are too big for git
   - [ ] add the list of sample ids used by Richiardi et al. in their paper
+  - [ ] add dependencies
   
 ## Content:
 1. data:
