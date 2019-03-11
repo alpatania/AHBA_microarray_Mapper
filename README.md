@@ -21,7 +21,7 @@ Understanding how gene expression translates to and affects human behaviour is o
   
 ## Content:
 1. data:
-    - dataset normalized *this is not actually possible on git because of the file size, i'll find another way, in the meantime write me an email*
+    - dataset normalized: Download the data used in the study [here](https://figshare.com/s/9f9806df6a5a73cc18bf).
     - the two list of genes used in the study
       - `dopamine.txt`
       - `richiardi.txt`
